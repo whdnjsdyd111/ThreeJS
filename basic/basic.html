@@ -5,6 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        html, body {
+           margin: 0;
+           height: 100%;
+        }
+        #c {
+           width: 100%;
+           height: 100%;
+           display: block;
+        }
+        </style>
 </head>
 <body>
     <canvas id="c"></canvas>
@@ -62,13 +73,19 @@
                 cube.rotation.x = time;
                 cube.rotation.y = time;
                 */
+                
+                if(resizeRendererToDisplaySize(renderer)) {
+                    const canvas = renderer.domElement;
+                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    camera.updateProjectionMatrix();
+                }
 
                 cubes.forEach((cube, ndx) => {
                     const speed = 1 + ndx * .1;
                     const rot = time * speed;
                     cube.rotation.x = rot;
                     cube.rotation.y = rot;
-                })
+                });
 
                 renderer.render(scene, camera);
                 
@@ -83,6 +100,19 @@
                 light.position.set(-1, 2, 4);
                 scene.add(light);
             }
+        }
+
+        function resizeRendererToDisplaySize(renderer) {
+            const canvas = renderer.domElement;
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            const needResize = canvas.width !== width || canvas.height !== height;
+
+            if(needResize) {
+                renderer.setSize(width, height, false);
+            }
+
+            return needResize;
         }
 
         main();
