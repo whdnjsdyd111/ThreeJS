@@ -55,6 +55,11 @@ function main() {
         objects.push(obj);
     }
 
+    function addSolidGeometry(x, y, geometry) {
+        const mesh = new THREE.Mesh(geometry, createMaterial());
+        addObject(x, y, mesh);
+    }
+
     // scene.add(cube);
     // renderer.render(scene, camera);
 
@@ -105,6 +110,19 @@ function resizeRendererToDisplaySize(renderer) {
     }
 
     return needResize;
+}
+
+function createMaterial() {
+    const material = new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide,
+    });
+
+    const hue = Math.random();
+    const saturation = 1;
+    const luminance = 0.5;
+    material.color.setHSL(hue, saturation, luminance);
+
+    return material;
 }
 
 main();
