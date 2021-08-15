@@ -33,6 +33,7 @@ class DegRadHelper {
 function main() {
     const canvas = document.querySelector("#c");
     const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.physicallyCorrectLights = true;
     RectAreaLightUniformsLib.init();
     const gui = new GUI();
 
@@ -104,15 +105,19 @@ function main() {
     scene.add(light);
     */
     const color = 0xffffff;
-    const intensity = 5;
-    const width = 12;
-    const height = 4;
+    const intensity = 1;
+    // const width = 12;
+    // const height = 4;
     // const light = new THREE.DirectionalLight(color, intensity);
     // const light = new THREE.PointLight(color, intensity);
     // const light = new THREE.SpotLight(color, intensity);
-    const light = new THREE.RectAreaLight(color, intensity, width, height);
+    // const light = new THREE.RectAreaLight(color, intensity, width, height);
+    const light = new THREE.PointLight(color, intensity);
     light.position.set(0, 10, 0);
-    light.rotation.x = THREE.MathUtils.degToRad(-90);
+    light.power = 800;
+    light.decay = 2;
+    light.distance = Infinity;
+    // light.rotation.x = THREE.MathUtils.degToRad(-90);
     // light.target.position.set(-5, 0, 0);
     scene.add(light);
     // scene.add(light.target);
@@ -149,10 +154,10 @@ function main() {
     */
 
     gui.addColor(new ColorGUIHelper(light, "color"), "value").name("color");
-    gui.add(light, "intensity", 0, 2, 0.01);
+    // gui.add(light, "intensity", 0, 2, 0.01);
     // gui.add(light, "distance", 0, 40).onChange(updateLight);
-    gui.add(light, "width", 0, 20);
-    gui.add(light, "height", 0, 20);
+    // gui.add(light, "width", 0, 20);
+    // gui.add(light, "height", 0, 20);
     // gui.add(new DegRadHelper(light, "angle"), "value", 0, 90).name("angle").onChange(updateLight);
     // gui.add(light, "penumbra", 0, 1, 0.01);
     gui.add(new DegRadHelper(light.rotation, "x"), "value", -180, 180).name(
@@ -164,6 +169,8 @@ function main() {
     gui.add(new DegRadHelper(light.rotation, "z"), "value", -180, 180).name(
         "z rotation"
     );
+    gui.add(light, "decay", 0, 4, 0.01);
+    gui.add(light, "power", 0, 2000);
 
     makeXYZGUI(gui, light.position, "position");
     // makeXYZGUI(gui, light.target.position, "target", updateLight);
